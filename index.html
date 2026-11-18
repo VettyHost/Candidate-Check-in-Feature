@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Applicant Appointment Reminder — Email & SMS</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col">
+
+  <!-- Top Navigation Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold shadow-sm">
+          DS
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-semibold text-slate-900 leading-tight">Appointment Reminder</h1>
+          <p class="text-xs text-slate-500">Applicant Email & SMS</p>
+        </div>
+      </div>
+
+      <button onclick="resetApplicantView()" class="text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition cursor-pointer">
+        Reset
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Area: Applicant Email & SMS Only -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- Left Column: Applicant Email Preview -->
+      <div class="lg:col-span-7 space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-bold text-slate-900">Applicant Email</h2>
+          <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+            No health or test info included
+          </span>
+        </div>
+
+        <!-- Email Client Frame -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="bg-slate-100 px-5 py-3.5 border-b border-slate-200 text-xs text-slate-600 space-y-1">
+            <div><span class="font-semibold text-slate-800">To:</span> jordan.taylor@example.com</div>
+            <div><span class="font-semibold text-slate-800">Subject:</span> Reminder: Your clinic appointment today</div>
+          </div>
+
+          <!-- Email Body -->
+          <div class="p-6 sm:p-8 bg-white">
+            <div class="max-w-md mx-auto">
+              <p class="text-sm text-slate-600 mb-4">Hi Jordan,</p>
+              <p class="text-sm text-slate-700 leading-relaxed mb-4">
+                This is a reminder about your scheduled clinic appointment today at <strong class="font-semibold text-slate-900">Downtown Health Clinic</strong> (opens at 8:00 AM).
+              </p>
+              <p class="text-sm text-slate-700 leading-relaxed mb-6">
+                Please confirm whether you visited the clinic today:
+              </p>
+
+              <!-- Single-Click Action Buttons -->
+              <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                <button id="btn-yes" type="button" onclick="handleSingleClickAction('yes')" class="flex-1 py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold text-center shadow-sm transition cursor-pointer flex items-center justify-center gap-2">
+                  <span id="btn-yes-label">Yes, I visited</span>
+                </button>
+                <button id="btn-no" type="button" onclick="handleSingleClickAction('no')" class="flex-1 py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-sm font-semibold text-center shadow-xs transition cursor-pointer flex items-center justify-center gap-2">
+                  <span id="btn-no-label">No, I didn't go</span>
+                </button>
+              </div>
+
+              <!-- Subtle Inline Confirmation Badge (hidden until clicked) -->
+              <div id="inline-status-banner" class="hidden mb-6 px-3.5 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-600 flex items-center justify-center gap-2 text-center">
+                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span id="inline-status-text"></span>
+              </div>
+
+              <!-- Footer with tiny centered "stop" link -->
+              <div class="border-t border-slate-100 pt-5 text-center mt-4">
+                <p class="text-xs text-slate-400 mb-3">
+                  Please bring a valid government-issued photo ID.
+                </p>
+                <button id="btn-stop" type="button" onclick="handleSingleClickAction('stop')" class="text-[11px] text-slate-400 hover:text-slate-600 underline decoration-slate-300 underline-offset-2 transition cursor-pointer">
+                  stop
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Applicant SMS Preview -->
+      <div class="lg:col-span-5 space-y-3">
+        <h2 class="text-base font-bold text-slate-900">Applicant SMS</h2>
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="text-xs font-medium text-slate-500">Clinic Reminder SMS</span>
+          </div>
+
+          <div class="bg-slate-100 rounded-2xl rounded-tl-sm p-4 text-sm text-slate-800 leading-relaxed border border-slate-200/70">
+            Reminder: You have a scheduled clinic visit today at Downtown Health Clinic (opens 8:00 AM). Confirm your visit:
+            <button id="sms-url-link" type="button" onclick="toggleSmsInlineConfirm()" class="text-indigo-600 hover:text-indigo-700 underline underline-offset-2 font-medium break-all text-left cursor-pointer">
+              https://portal.example.com/v/9f8a2b
+            </button>
+            or reply STOP to opt out.
+
+            <!-- Inline Single-Click SMS Confirmation Bar -->
+            <div id="sms-inline-actions" class="hidden mt-3 pt-3 border-t border-slate-200/80 flex flex-col sm:flex-row gap-2">
+              <button id="sms-btn-yes" type="button" onclick="handleSingleClickAction('yes')" class="flex-1 py-2 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold text-center transition cursor-pointer">
+                Yes, I visited
+              </button>
+              <button id="sms-btn-no" type="button" onclick="handleSingleClickAction('no')" class="flex-1 py-2 px-3 rounded-lg bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-semibold text-center transition cursor-pointer">
+                No, I didn't go
+              </button>
+            </div>
+
+            <!-- SMS Inline Recorded Status -->
+            <div id="sms-inline-status" class="hidden mt-3 pt-2.5 border-t border-slate-200/80 text-xs text-slate-500 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span id="sms-inline-status-text"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    let selectedAction = null;
+
+    const STATUS_MESSAGES = {
+      yes: 'Response recorded: Yes, I visited. Reminders stopped.',
+      no: "Response recorded: No, I didn't go. Reminders stopped.",
+      stop: 'Unsubscribed. Automated reminders stopped.'
+    };
+
+    // Toggle inline quick-confirm buttons inside the SMS card when clicking the URL
+    function toggleSmsInlineConfirm() {
+      if (selectedAction) return;
+      const smsActions = document.getElementById('sms-inline-actions');
+      smsActions.classList.toggle('hidden');
+    }
+
+    // Single-click capture: immediately gray out buttons and show inline confirmation without pop-ups or page loads
+    function handleSingleClickAction(actionKey) {
+      if (selectedAction) return;
+      selectedAction = actionKey;
+
+      const btnYes = document.getElementById('btn-yes');
+      const btnNo = document.getElementById('btn-no');
+      const btnStop = document.getElementById('btn-stop');
+      const banner = document.getElementById('inline-status-banner');
+      const bannerText = document.getElementById('inline-status-text');
+
+      // Disable and gray out Email buttons
+      btnYes.disabled = true;
+      btnNo.disabled = true;
+      btnStop.disabled = true;
+
+      btnYes.className = 'flex-1 py-3 px-4 rounded-xl bg-slate-200 text-slate-500 border border-slate-200 text-sm font-semibold text-center cursor-not-allowed flex items-center justify-center gap-2 transition';
+      btnNo.className = 'flex-1 py-3 px-4 rounded-xl bg-slate-100 text-slate-400 border border-slate-200 text-sm font-semibold text-center cursor-not-allowed flex items-center justify-center gap-2 transition';
+      btnStop.className = 'text-[11px] text-slate-300 cursor-not-allowed no-underline';
+
+      if (actionKey === 'yes') {
+        document.getElementById('btn-yes-label').textContent = '✓ Yes, I visited';
+        btnYes.className = 'flex-1 py-3 px-4 rounded-xl bg-slate-200 text-slate-700 border border-slate-300 text-sm font-semibold text-center cursor-not-allowed flex items-center justify-center gap-2 transition';
+      } else if (actionKey === 'no') {
+        document.getElementById('btn-no-label').textContent = "✓ No, I didn't go";
+        btnNo.className = 'flex-1 py-3 px-4 rounded-xl bg-slate-200 text-slate-700 border border-slate-300 text-sm font-semibold text-center cursor-not-allowed flex items-center justify-center gap-2 transition';
+      } else if (actionKey === 'stop') {
+        btnStop.textContent = '✓ stopped';
+      }
+
+      // Show subtle inline confirmation status inside the Email card
+      bannerText.textContent = STATUS_MESSAGES[actionKey];
+      banner.classList.remove('hidden');
+
+      // Sync SMS card state cleanly without pop-ups
+      const smsUrl = document.getElementById('sms-url-link');
+      const smsActions = document.getElementById('sms-inline-actions');
+      const smsStatus = document.getElementById('sms-inline-status');
+      const smsStatusText = document.getElementById('sms-inline-status-text');
+
+      smsUrl.disabled = true;
+      smsUrl.className = 'text-slate-400 underline underline-offset-2 font-medium break-all text-left cursor-not-allowed';
+      smsActions.classList.add('hidden');
+      smsStatusText.textContent = STATUS_MESSAGES[actionKey];
+      smsStatus.classList.remove('hidden');
+    }
+
+    // Reset view back to initial unclicked state
+    function resetApplicantView() {
+      selectedAction = null;
+
+      const btnYes = document.getElementById('btn-yes');
+      const btnNo = document.getElementById('btn-no');
+      const btnStop = document.getElementById('btn-stop');
+
+      btnYes.disabled = false;
+      btnNo.disabled = false;
+      btnStop.disabled = false;
+
+      btnYes.className = 'flex-1 py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold text-center shadow-sm transition cursor-pointer flex items-center justify-center gap-2';
+      btnNo.className = 'flex-1 py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-sm font-semibold text-center shadow-xs transition cursor-pointer flex items-center justify-center gap-2';
+      btnStop.className = 'text-[11px] text-slate-400 hover:text-slate-600 underline decoration-slate-300 underline-offset-2 transition cursor-pointer';
+
+      document.getElementById('btn-yes-label').textContent = 'Yes, I visited';
+      document.getElementById('btn-no-label').textContent = "No, I didn't go";
+      btnStop.textContent = 'stop';
+
+      document.getElementById('inline-status-banner').classList.add('hidden');
+
+      const smsUrl = document.getElementById('sms-url-link');
+      smsUrl.disabled = false;
+      smsUrl.className = 'text-indigo-600 hover:text-indigo-700 underline underline-offset-2 font-medium break-all text-left cursor-pointer';
+      document.getElementById('sms-inline-actions').classList.add('hidden');
+      document.getElementById('sms-inline-status').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
